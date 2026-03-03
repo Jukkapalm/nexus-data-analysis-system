@@ -2,6 +2,7 @@
 :root {
     --bg-dark: #0A0A0F;
     --bg-panel: #0D0D1A;
+    --bg-card: #0F0F1F;
     --cyan: #00FFFF;
     --violet: #9D00FF;
     --pink: #FF0066;
@@ -168,6 +169,157 @@ body {
     color: var(--violet);
 }
 
+/* Pääsisältö */
+.main-content {
+    margin-left: var(--sidebar-width);
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    color: var(--text-dim);
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(0.65rem, 0.8vw, 0.8rem);
+}
+
+/* Sivun otsikko */
+.page-header {
+    margin-bottom: clamp(1.5rem, 2.5vw, 2rem);
+    padding-bottom: clamp(0.75rem, 1.2vw, 1rem);
+    border-bottom: 1px solid var(--border);
+}
+.page-title {
+    font-family: "Orbitron", monospace;
+    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 3px;
+}
+.page-title span {
+    color: var(--cyan);
+}
+.page-path {
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(0.5rem, 0.65vw, 0.65rem);
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    margin-top: 0.25rem;
+}
+
+/* Status kortit ylärivi */
+.stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: clamp(0.75rem, 1.5vw, 1.25rem);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Status kortti kulmakoriste */
+.stat-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: clamp(20px, 2vw, 30px);
+    height: clamp(20px, 2vw, 30px);
+    border-top: 2px solid var(--cyan);
+    border-left: 2px solid var(--cyan);
+}
+.stat-card::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: clamp(20px, 2vw, 30px);
+    height: clamp(20px, 2vw, 30px);
+    border-bottom: 2px solid var(--cyan);
+    border-right: 2px solid var(--cyan);
+}
+.stat-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(0.5rem, 0.65vw, 0.65rem);
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+}
+.stat-value {
+    font-family: "Orbitron", monospace;
+    font-size: clamp(1rem, 2vw, 1.6rem);
+    font-weight: 700;
+    color: var(--cyan);
+    text-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+}
+.stat-value.inactive {
+    color: var(--text-dim);
+    text-shadow: none;
+    font-size: clamp(0.7rem, 1vw, 0.9rem);
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 400;
+}
+
+/* Tyhjä tila */
+.empty-state {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: clamp(3rem, 6vw, 5rem) clamp(2rem, 4vw, 3rem);
+    text-align: center;
+    position: relative;
+    margin-top: clamp(1rem, 2vw, 1.5rem);
+}
+
+/* Tyhjä tila kulmakoristeet */
+.empty-state::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: clamp(30px, 3vw, 50px);
+    height: clamp(30px, 3vw, 50px);
+    border-top: 2px solid var(--violet);
+    border-left: 2px solid var(--violet);
+}
+.empty-state::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: clamp(30px, 3vw, 50px);
+    height: clamp(30px, 3vw, 50px);
+    border-bottom: 2px solid var(--violet);
+    border-right: 2px solid var(--violet);
+}
+.empty-icon {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    color: var(--text-dim);
+    margin-bottom: clamp(1rem, 2vw, 1.5rem);
+    display: block;
+    opacity: 0.4;
+}
+.empty-title {
+    font-family: "Orbitron", monospace;
+    font-size: clamp(0.9rem, 1.8vw, 1.4rem);
+    font-weight: 700;
+    color: var(--text-dim);
+    letter-spacing: 4px;
+    margin-bottom: 1rem;
+}
+.empty-status {
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(0.6rem, 0.85vw, 0.8rem);
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+}
+.empty-status .blink {
+    color: var(--pink);
+    animation: blink 1.2s infinite;
+}
+.empty-hint {
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(0.5rem, 0.7vw, 0.65rem);
+    color: var(--text-dim);
+    opacity: 0.5rem;
+    margin-top: clamp(1.5rem, 2.5vw, 2rem);
+    letter-spacing: 1px;
+}
+
 @keyframes glitch {
     0%, 95%, 100% { text-shadow: 0 0 20px rgba(0, 255, 255, 0.6); transform: none; }
     96% { text-shadow: -2px 0 var(--pink), 2px 0 var(--cyan); transform: skewX(-1deg); }
@@ -178,12 +330,7 @@ body {
     0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--cyan); }
     50% { opacity: 0.4; box-shadow: 0 0 3px var(--cyan); }
 }
-
-/* Pääsisältö */
-.main-content {
-    margin-left: var(--sidebar-width);
-    padding: clamp(1.5rem, 3vw, 2.5rem);
-    color: var(--text-dim);
-    font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.65rem, 0.8vw, 0.8rem);
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
 }
