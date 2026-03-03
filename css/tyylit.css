@@ -166,9 +166,7 @@ body {
     color: var(--text-dim);
     letter-spacing: 1px;
 }
-.sidebar-footer .version span {
-    color: var(--violet);
-}
+.sidebar-footer .version span { color: var(--violet); }
 
 /* Pääsisältö */
 .main-content {
@@ -177,7 +175,12 @@ body {
     color: var(--text-dim);
     font-family: "JetBrains Mono", monospace;
     font-size: clamp(0.65rem, 0.8vw, 0.8rem);
+    min-height: 100vh;
 }
+
+/* Näkymät */
+.view { display: none; animation: fadeIn 0.3s ease forwards; }
+.view.active { display: block; }
 
 /* Sivun otsikko */
 .page-header {
@@ -192,9 +195,8 @@ body {
     color: var(--text);
     letter-spacing: 3px;
 }
-.page-title span {
-    color: var(--cyan);
-}
+.page-title span { color: var(--cyan); }
+
 .page-path {
     font-family: "JetBrains Mono", monospace;
     font-size: clamp(0.5rem, 0.65vw, 0.65rem);
@@ -407,9 +409,7 @@ body {
     padding: 0.2rem 0.6rem;
     letter-spacing: 1px;
 }
-#fileInput {
-    display: none;
-}
+#fileInput { display: none; }
 
 /* Data Import Sample nappi */
 .sample-btn {
