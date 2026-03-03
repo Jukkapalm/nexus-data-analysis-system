@@ -50,51 +50,143 @@
 
         <!-- Pääsisältö -->
         <main class="main-content">
+            
+            <!-- Näkymä: Dashboard -->
+            <div id="view-dashboard" class="view active">
 
-            <!-- Sivun otsikko -->
-            <div class="page-header">
-                <div class="page-title"><span>//</span> DASHBOARD</div>
-                <div class="page-path">nexus / dashboard / overview</div>
+                <!-- Sivun otsikko -->
+                <div class="page-header">
+                    <div class="page-title"><span>//</span> DASHBOARD</div>
+                    <div class="page-path">nexus / dashboard / overview</div>
+                </div>
+
+                <!-- Status kortit -->
+                <div class="row g-3">
+                    <div class="col-3">
+                        <div class="stat-card">
+                            <div class="stat-label">DATASETS LOADED</div>
+                            <div class="stat-value inactive">- NONE -</div>
+                        </div>
+                    </div>
+
+                    <div class="col-3">
+                        <div class="stat-card">
+                            <div class="stat-label">TOTAL RECORDS</div>
+                            <div class="stat-value inactive">- NONE -</div>
+                        </div>
+                    </div>
+
+                    <div class="col-3">
+                        <div class="stat-card">
+                            <div class="stat-label">LAST IMPORT</div>
+                            <div class="stat-value inactive">- NONE -</div>
+                        </div>
+                    </div>
+
+                    <div class="col-3">
+                        <div class="stat-card">
+                            <div class="stat-label">SYSTEM STATUS</div>
+                            <div class="stat-value inactive">IDLE</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tyhjä tila -->
+                <div class="empty-state">
+                    <i class="bi bi-database-slash empty-icon"></i>
+                    <div class="empty-title">NO DATASET ACTIVE</div>
+                    <div class="empty-status">SYSTEM STATUS: <span class="blink">IDLE</span></div>
+                    <div class="empty-status">AWAITING DATA INPUT...</div>
+                    <div class="empty-hint">// navigate to DATA IMPORT to load your first dataset</div>
+                </div>
             </div>
 
-            <!-- Status kortit -->
-            <div class="row g-3">
-                <div class="col-3">
-                    <div class="stat-card">
-                        <div class="stat-label">DATASETS LOADED</div>
-                        <div class="stat-value inactive">- NONE -</div>
-                    </div>
+            <!-- Näkymä: Data Import -->
+            <div id="view-import" class="view">
+                <div class="page-header">
+                    <div class="page-title"><span>//</span> DATA IMPORT</div>
+                    <div class="page-path">nexus / import / upload</div>
                 </div>
 
-                <div class="col-3">
-                    <div class="stat-card">
-                        <div class="stat-label">TOTAL RECORDS</div>
-                        <div class="stat-value inactive">- NONE -</div>
-                    </div>
-                </div>
+                <div class="row g-4">
 
-                <div class="col-3">
-                    <div class="stat-card">
-                        <div class="stat-label">LAST IMPORT</div>
-                        <div class="stat-value inactive">- NONE -</div>
-                    </div>
-                </div>
+                    <!-- Vasen: Dropzone + Analyzing -->
+                    <div class="col-7">
+                        <div class="dropzone" id="dropzone">
+                            <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" multiple>
+                            <i class="bi bi-cloud-upload dropdzone-icon"></i>
+                            <div class="dropzone-title">DROP FILES HERE</div>
+                            <div class="dropzone-sub">or click to browse your system</div>
+                            <div class="dropzone-formats">
+                                <span class="format-badge">.XLSX</span>
+                                <span class="format-badge">.XLS</span>
+                                <span class="format-badge">.CSV</span>
+                            </div>
+                        </div>
 
-                <div class="col-3">
-                    <div class="stat-card">
-                        <div class="stat-label">SYSTEM STATUS</div>
-                        <div class="stat-value inactive">IDLE</div>
+                        <div class="d-flex align-items-center gap-3 mt-3">
+                            <div class="flex-grow-1" style="height: 1px; background: var(--border);"></div>
+                            <button class="sample-btn" onclick="loadSampleData()">// LOAD SAMPLE DATA</button>
+                            <div class="flex-grow-1" style="height: 1px; background: var(--border);"></div>
+                        </div>
+
+                        <div class="analyzing-box mt-3" id="analyzingBox">
+                            <div class="analyzing-header">
+                                <div class="analyzing-dot"></div>
+                                <div class="analyzing-title">ANALYZING...</div>
+                            </div>
+                            <div class="analyzing-log" id="analyzingLog"></div>
+                        </div>
+                    </div>
+
+                    <!-- Oikea: Ladatut tiedostot -->
+                    <div class="col-5">
+                        <div class="files-section">
+                            <div class="section-label">// LOADED DATASETS</div>
+                            <div id="filesEmpty" class="files-empty">NO FILES LOADED</div>
+                            <div id="filesList"></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Tyhjä tila -->
-            <div class="empty-state">
-                <i class="bi bi-database-slash empty-icon"></i>
-                <div class="empty-title">NO DATASET ACTIVE</div>
-                <div class="empty-status">SYSTEM STATUS: <span class="blink">IDLE</span></div>
-                <div class="empty-status">AWAITING DATA INPUT...</div>
-                <div class="empty-hint">// navigate to DATA IMPORT to load your first dataset</div>
+            <!-- Näkymä: Analysis -->
+            <div id="view-analysis" class="view">
+                <div class="page-header">
+                    <div class="page-title"><span>//</span> ANALYSIS</div>
+                    <div class="page-path">nexus / analysis / visualize</div>
+                </div>
+                <div class="empty-state">
+                    <i class="bi bi-bar-chart-line empty-icon"></i>
+                    <div class="empty-title">COMING SOON</div>
+                    <div class="empty-status">MODULE NOT YET INITIALIZED</div>
+                </div>
+            </div>
+
+            <!-- Näkymä: Data Merge -->
+            <div id="view-merge" class="view">
+                <div class="page-header">
+                    <div class="page-title"><span>//</span> DATA MERGE</div>
+                    <div class="page-path">nexu / merge / combine</div>
+                </div>
+                <div class="empty-state">
+                    <i class="bi bi-intersect empty-icon"></i>
+                    <div class="empty-title">COMING SOON</div>
+                    <div class="empty-status">MODULE NOT YET INITIALIZED</div>
+                </div>
+            </div>
+
+            <!-- Näkymä: Reports -->
+            <div id="view-reports" class="view">
+                <div class="page-header">
+                    <div class="page-title"><span>//</span> REPORTS</div>
+                    <div class="page-path">nexus / reports / output</div>
+                </div>
+                <div class="empty-state">
+                    <i class="bi bi-file-earmark-text empty-icon"></i>
+                    <div class="empty-title">COMING SOON</div>
+                    <div class="empty-status">MODULE NOT YET INITIALIZED</div>
+                </div>
             </div>
         </main>
 
