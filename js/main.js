@@ -64,7 +64,7 @@ function handleFiles(files) {
     if (valid.length === 0) return;
     showAnalyzing(valid[0].name);
     setTimeout(() => {
-        valid.forEach(f => addFilesToList(f.name, formatSize(f.size)));
+        valid.forEach(f => addFileToList(f.name, formatSize(f.size)));
     }, 3000);
 }
 
@@ -110,7 +110,7 @@ function addFileToList(name, size) {
         <i class="bi ${icon} file-item-icon"></i>
         <div class="file-item-name">${name}</div>
         <div class="file-item-meta">${size}</div>
-        <div class="file-item-status>✓ LOADED</div>
+        <div class="file-item-status">✓ LOADED</div>
         <button class="file-item-remove" onclick="removeFile(this)"><i class="bi bi-x"></i></button>
     `;
     filesList.appendChild(item);
