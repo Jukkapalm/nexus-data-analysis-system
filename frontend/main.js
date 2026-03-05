@@ -62,10 +62,45 @@ function handleFiles(files) {
     );
 
     if (valid.length === 0) return;
-    showAnalyzing(valid[0].name);
-    setTimeout(() => {
-        valid.forEach(f => addFileToList(f.name, formatSize(f.size)));
-    }, 3000);
+    
+    // Lähetetään jokainen tiedosto backendille
+    valid.forEach(file => {
+        showAnalyzing(file.name);
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        // Lähetetään tiedosto uploadille
+        fetch("http://127.0.0.1:5000/api/upload", {
+            method: "POST",
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("Backend vastasi:", data);
+            addFileToList(data.filename, data.rows + "rows");
+            updateDashboard(data);
+        })
+        .catch(err => {
+            console.error("Virhe:", err);
+        });
+
+        // Lähetetään tiedosto analyysille
+        const formData2 = new FormData();
+        formData2.append("file", file);
+
+        fetch("http://127.0.0.1:5000/api/analyze", {
+            method: "POST",
+            body: formData2
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("Analyze vastasi:", data);
+            // Tallennetaan analyysitylos muistiin
+            window.analysisData = data;
+        })
+        .catch(err => console.error("Analyze virhe:", err));
+    });
 }
 
 // Analyzing animaatio
@@ -164,4 +199,125 @@ function formatSize(bytes) {
     if (bytes < 1024) return bytes + " B";
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
     return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+}
+
+// Päivittää dashboard stat-kortit ladatun datan perusteella
+function updateDashboard(data) {
+
+    // Ladattujen tiedostojen määrä
+    const loadedCount = document.getElementById("filesList").children.length;
+    document.getElementById("stat-datasets").textContent = loadedCount;
+
+    // Rvimäärä
+    document.getElementById("stat-records").textContent = data.rows;
+
+    // Viimeisin tiedosto
+    document.getElementById("stat-lastimport").textContent = data.filename;
+
+    // System status
+    document.getElementById("stat-status").textContent = "ACTIVE";
+
+    // Poistetaan inactive-tyyli ja piilotetaan empty-state
+    document.querySelectorAll("#view-dashboard .stat-value").forEach(el => {
+        el.classList.remove("inactive");
+    });
+    document.querySelector("#view-dashboard .empty-state").style.display = "none";
+}
+
+// Chart.js globaalit asetukset
+Chart.defaults.color = "#555577";
+Chart.defaults.borderColor = "rgba(0,255,255,0.08)";
+Chart.defaults.font.family = "JetBrains Mono";
+Chart.defaults.font.size = 10;
+
+// Värit kaavioisiin
+const CHART_COLORS = ["#00ffff", "#9d00ff", "#ff0066", "#00ff88", "#ffcc00", "#ff6600", "#00aaff", "#ff00aa"];
+
+// Kaavio-instanssit
+let barChart = null;
+let doughnutChart = null;
+
+// Piirtää kaaviot analysis datasta
+function renderCharts(data) {
+
+    // Näytetään kaaviot ja piilotetaan empty state
+    document.getElementById("analysis-empty").style.display = "none";
+    document.getElementById("analysis-content").style.display = "block";
+
+    // Tuhotaan vanhat kaaviot jos olemassa
+    if (barChart) barChart.destroy();
+    if (doughnutChart) doughnutChart.destroy();
+
+    // Pylväskaavio
+    if (data.bar_data && data.bar_data.labels) {
+        document.getElementById("barChartTitle").textContent =
+            "// " + data.bar_data.label.toUpperCase();
+
+        barChart = new Chart(document.getElementById("barChart"), {
+            type: "bar",
+            data: {
+                labels: data.bar_data.labels,
+                datasets: [{
+                    data: data.bar_data.values,
+                    backgroundColor: CHART_COLORS.map(c => c + "66"),
+                    borderColor: CHART_COLORS,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { color: "rgba(0,255,255,0.06)" }, ticks: { color: "#555577" } },
+                    y: { grid: { color: "rgba(0,255,255,0.06)" }, ticks: { color: "#555577" } }
+                }
+            }
+        });
+    }
+
+    // Doughnut kaavio
+    if (data.doughnut_data && data.doughnut_data.labels) {
+        document.getElementById("doughnutChartTitle").textContent =
+            "// " + data.doughnut_data.label.toUpperCase();
+
+        doughnutChart = new Chart(document.getElementById("doughnutChart"), {
+            type: "doughnut",
+            data: {
+                labels: data.doughnut_data.labels,
+                datasets: [{
+                    data: data.doughnut_data.values,
+                    backgroundColor: CHART_COLORS.map(c => c + "99"),
+                    borderColor: CHART_COLORS,
+                    borderWidth: 1,
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: "65%",
+                plugins: {
+                    legend: {
+                        position: "bottom",
+                        labels: {
+                            color: "#555577",
+                            boxWidth: 10,
+                            padding: 8,
+                            font: { size: 9 }
+                        }
+                    }
+                }
+            }
+        });
+    }
+}
+
+// Piirretään kaaviot kun Analysis-näkymä avataan
+const originalShowView = showView;
+window.showView = function(name) {
+    originalShowView(name);
+    if (name === "analysis" && window.analysisData) {
+        setTimeout(() => renderCharts(window.analysisData), 50);
+    }
 }
