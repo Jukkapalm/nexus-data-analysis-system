@@ -1,3 +1,13 @@
+// Custom alert selaimen oletusalertin sijaan
+function nexusAlert(msg) {
+    document.getElementById("nexusAlertMsg").textContent = msg;
+    document.getElementById("nexusAlert").style.display = "flex";
+}
+
+function closeNexusAlert() {
+    document.getElementById("nexusAlert").style.display = "none";
+}
+
 // Näkymien vaihto
 function showView(name) {
 
@@ -458,7 +468,7 @@ function executeMerge() {
     ).map(cb => cb.value);
 
     if (selected.length < 2) {
-        alert("Valitse vähintään 2 tiedostoa!");
+        nexusAlert("Valitse vähintään 2 tiedostoa!");
         return;
     }
 
@@ -468,7 +478,7 @@ function executeMerge() {
         : [];
 
     if (filesToMerge.length < 2) {
-        alert("Tiedostoja ei löydy muistista - lataa tiedostot uudelleen!");
+        nexusAlert("Tiedostoja ei löydy muistista - lataa tiedostot uudelleen!");
         return;
     }
 
@@ -575,7 +585,7 @@ function sendToReports() {
     ).map(cb => cb.value);
 
     if (selected.length === 0) {
-        alert("Valitse vähintään yksi sarake!");
+        nexusAlert("Valitse vähintään yksi sarake!");
         return;
     }
 
@@ -588,7 +598,7 @@ function sendToReports() {
         : [];
 
     if (filesToMerge.length < 2) {
-        alert("Tiedostoja ei löydy muistista!");
+        nexusAlert("Tiedostoja ei löydy muistista!");
         return;
     }
 
@@ -635,6 +645,7 @@ function typewriterEffect(lines, index = 0) {
     const div = document.createElement("div");
     div.className = line.cls;
     terminal.appendChild(div);
+    terminal.scrollTop = terminal.scrollHeight;
 
     let charIndex = 0;
     const interval = setInterval(() => {
@@ -699,7 +710,7 @@ function exportData() {
     const columns = window.reportColumns;
 
     if (!files || !columns) {
-        alert("Ei exportattavaa dataa — lähetä ensin data Reportsiin!");
+        nexusAlert("Ei exportattavaa dataa — lähetä ensin data Reportsiin!");
         return;
     }
 
