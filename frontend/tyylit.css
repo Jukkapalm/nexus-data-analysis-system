@@ -743,6 +743,50 @@ body {
     display: block;
 }
 
+/* Merge sarakevlitsimet */
+.col-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+}
+.col-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(0.45rem, 0.6vw, 0.6rem);
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    cursor: pointer;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--border);
+    transition: all 0.2s ease;
+}
+.col-checkbox-item:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+}
+.col-checkbox-item input[type="checkbox"] {
+    accent-color: var(--cyan);
+}
+
+/* Reports terminaali */
+.reports-terminal {
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(0.5rem, 0.7vw, 0.65rem);
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    line-height: 2;
+    padding: clamp(0.5rem, 1vw, 1rem) 0;
+    min-height: clamp(200px, 25vw, 350px);
+}
+.reports-terminal .t-line { color: var(--text-dim); }
+.reports-terminal .t-success { color: var(--green); }
+.reports-terminal .t-cyan { color: var(--cyan); }
+.reports-terminal .t-pink { color: var(--pink); }
+.reports-terminal .t-value { color: var(--cyan); font-weight: 700; }
+
 @keyframes glitch {
     0%, 95%, 100% { text-shadow: 0 0 20px rgba(0, 255, 255, 0.6); transform: none; }
     96% { text-shadow: -2px 0 var(--pink), 2px 0 var(--cyan); transform: skewX(-1deg); }
