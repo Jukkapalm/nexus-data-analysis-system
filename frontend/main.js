@@ -81,6 +81,10 @@ function handleFiles(files) {
             addFileToList(data.filename, data.rows + "rows");
             updateDashboard(data);
             window.lastUploadedFile = file;
+
+            // Tallennetaan tiedosto listaan mergeä varten
+            if (!window.uploadedFiles) window.uploadedFiles = [];
+            window.uploadedFiles.push(file);
         })
         .catch(err => {
             console.error("Virhe:", err);
@@ -368,3 +372,173 @@ window.showView = function(name) {
         setTimeout(() => renderCharts(window.analysisData), 50);
     }
 }
+
+// Data Merge toiminnallisuus
+// Merge tyyppi - stack tai join
+let currentMergeType = "stack";
+
+// Päivittää merge tiedostolistan ladatuista tiedostoista
+function updateMergeFileList() {
+    const mergeFileList = document.getElementById("mergeFileList");
+    const files = document.getElementById("filesList").children;
+
+    // Jos tiedostoja alle 2 näytetään empty state
+    if (files.length < 2) {
+        document.getElementById("merge-empty").style.display ="block";
+        document.getElementById("merge-content").style.display = "none";
+        return;
+    }
+
+    // Näytetään merge sisältö
+    document.getElementById("merge-empty").style.display = "none";
+    document.getElementById("merge-content").style.display = "block";
+
+    // Täytetään tiedostolista
+    mergeFileList.innerHTML = "";
+    Array.from(files).forEach(item => {
+        const name = item.querySelector(".file-item-name").textContent;
+        const div = document.createElement("div");
+        div.className = "merge-file-item";
+        div.innerHTML = `
+            <input type="checkbox" value="${name}" onchange="toggleMergeFile(this)">
+            <div class="merge-file-name">${name}</div>
+        `;
+        div.addEventListener("click", (e) => {
+            if (e.target.type !== "checkbox") {
+                const cb = div.querySelector("input");
+                cb.checked = !cb.checked;
+                toggleMergeFile(cb);
+            }
+        });
+        mergeFileList.appendChild(div);
+    });
+}
+
+// Valitun tiedoston korostus
+function toggleMergeFile(checkbox) {
+    const item = checkbox.closest(".merge-file-item");
+    if (checkbox.checked) {
+        item.classList.add("selected");
+    } else {
+        item.classList.remove("selected");
+    }
+}
+
+// Vaihda merge tyyppi
+function setMergeType(type) {
+    currentMergeType = type;
+
+    document.getElementById("btnStack").classList.toggle("active", type === "stack");
+    document.getElementById("btnJoin").classList.toggle("active", type === "join");
+
+    document.getElementById("mergeTypeDesc").textContent = type === "stack"
+        ? "Pinoa tiedostot päällekkäin - samat sarakkeet yhdistyvät"
+        : "Yhdistä tiedostot yhteisen sarakkeen perusteella";
+
+    document.getElementById("joinColumnWrapper").style.display = type === "join" ? "block" : "none";
+
+    // Täytetään join sarake valitsin analyysi datasta
+    if (type === "join" && window.analysisData) {
+        const joinSelect = document.getElementById("joinColumnSelect");
+        joinSelect.innerHTML = "";
+        const allCols = [
+            ...window.analysisData.text_columns,
+            ...window.analysisData.numeric_columns
+        ];
+        allCols.forEach(col => {
+            joinSelect.innerHTML += `<option value="${col}">${col.toUpperCase()}</option>`;
+        });
+    }
+}
+
+// Suorita merge
+function executeMerge() {
+    const selected = Array.from(
+        document.querySelectorAll("#mergeFileList input:checked")
+    ).map(cb => cb.value);
+
+    if (selected.length < 2) {
+        alert("Valitse vähintään 2 tiedostoa!");
+        return;
+    }
+
+    // Haetaan oikeat File-objektit muistista
+    const filesToMerge = window.uploadedFiles
+        ? window.uploadedFiles.filter(f => selected.includes(f.name))
+        : [];
+
+    if (filesToMerge.length < 2) {
+        alert("Tiedostoja ei löydy muistista - lataa tiedostot uudelleen!");
+        return;
+    }
+
+    const formData = new FormData();
+    filesToMerge.forEach(f => formData.append("files[]", f));
+    formData.append("merge_type", currentMergeType);
+
+    if (currentMergeType === "join") {
+        const joinCol = document.getElementById("joinColumnSelect").value;
+        formData.append("join_column", joinCol);
+    }
+
+    // Näytetään loading tila
+    document.getElementById("mergePreview").innerHTML = '<div class="merge-awaiting">// executing merge...</div>';
+    document.getElementById("mergePreviewBadge").textContent = "PROCESSING";
+
+    fetch("http://127.0.0.1:5000/api/merge", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("Merge vastasi:", data);
+        window.mergedData = data;
+        renderMergePreview(data);
+    })
+    .catch(err => console.error("Merge virhe:", err));
+}
+
+// Renderöi merge esikatselu taulukkona
+function renderMergePreview(data) {
+    document.getElementById("mergePreviewBadge").textContent = data.rows + " ROWS / " + data.columns.length + " COLS";
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "merge-preview-wrapper";
+
+    const table = document.createElement("table");
+    table.className = "merge-table";
+
+    // Otsikkorivi
+    const thead = document.createElement("thead");
+    thead.innerHTML = "<tr>" + 
+        data.columns.map(col => 
+            `<th>${col.toUpperCase()}</th>`
+        ).join("") + "</tr>";
+    table.appendChild(thead);
+
+    // Datarivit
+    const tbody = document.createElement("tbody");
+    data.preview.forEach(row => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = data.columns.map(col => 
+            `<td>${row[col] !== null ? row[col] : "-"}</td>`
+        ).join("");
+        tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    wrapper.appendChild(table);
+
+    document.getElementById("mergePreview").innerHTML = "";
+    document.getElementById("mergePreview").appendChild(wrapper);
+}
+
+// Päivitetään showView jotta merge lista päivittyy
+const _showView = window.showView;
+window.showView = function(name) {
+    _showView(name);
+    if (name === "merge") {
+        updateMergeFileList();
+    }
+};
+
+merge-file-name
