@@ -280,7 +280,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -291,10 +291,45 @@
                     <div class="page-title"><span>//</span> REPORTS</div>
                     <div class="page-path">nexus / reports / output</div>
                 </div>
-                <div class="empty-state">
+                <div id="reports-empty" class="empty-state">
                     <i class="bi bi-file-earmark-text empty-icon"></i>
-                    <div class="empty-title">COMING SOON</div>
-                    <div class="empty-status">MODULE NOT YET INITIALIZED</div>
+                    <div class="empty-title">NO REPORT GENERATED</div>
+                    <div class="empty-status">GO TO DATA MERGE AND SEND REPORTS</div>
+                </div>
+
+                <!-- Reports sisältö -->
+                <div id="reports-content" style="display: none;">
+                    <div class="row g-4">
+
+                        <!-- Vasen: kirjoituskone output -->
+                        <div class="col-8">
+                            <div class="chart-card">
+                                <div class="chart-card-header">
+                                    <span class="chart-card-title">// SYSTEM OUTPUT</span>
+                                    <span class="chart-card-badge" id="reportsBadge">READY</span>
+                                </div>
+                                <div id="reportsTerminal" class="reports-terminal"></div>
+                            </div>
+                        </div>
+
+                        <!-- Oikea: export -->
+                        <div class="col-4">
+                            <div class="chart-card">
+                                <div class="chart-card-header">
+                                    <span class="chart-card-title">// EXPORT DATA</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="section-label">// FORMAT</div>
+                                    <div class="d-flex gap-2 mt-2">
+                                        <button class="merge-type-btn active" id="btnXlsx" onclick="setExportFormat('xlsx')">// XLSX</button>
+                                        <button class="merge-type-btn" id="btnCsv" onclick="setExportFormat('csv')">// CSV</button>
+                                    </div>
+                                </div>
+                                <button class="execute-btn mt-3" onclick="exportData()">// EXPORT FILE</button>
+                            </div>
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
         </main>
