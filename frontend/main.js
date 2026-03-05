@@ -80,6 +80,7 @@ function handleFiles(files) {
             console.log("Backend vastasi:", data);
             addFileToList(data.filename, data.rows + "rows");
             updateDashboard(data);
+            window.lastUploadedFile = file;
         })
         .catch(err => {
             console.error("Virhe:", err);
@@ -244,73 +245,119 @@ function renderCharts(data) {
     document.getElementById("analysis-empty").style.display = "none";
     document.getElementById("analysis-content").style.display = "block";
 
-    // Tuhotaan vanhat kaaviot jos olemassa
+    // Täytetään sarakevalitsimet tekstisarakkeilla
+    const barSelect = document.getElementById("barColumnSelect");
+    const doughnutSelect = document.getElementById("doughnutColumnSelect");
+    barSelect.innerHTML = "";
+    doughnutSelect.innerHTML = "";
+
+    data.text_columns.forEach(col => {
+        barSelect.innerHTML += `<option value="${col}">${col.toUpperCase()}</option>`;
+        doughnutSelect.innerHTML += `<option value="${col}">${col.toUpperCase()}</option>`;
+    });
+
+    // Piirretään kaaviot
+    drawBarChart(data.bar_data);
+    drawDoughnutChart(data.doughnut_data);
+}
+
+// Päivitä pylväskaavio valitun sarakkeen mukaan
+function updateBarChart() {
+    const col = document.getElementById("barColumnSelect").value;
+    const file = window.lastUploadedFile;
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("bar_column", col);
+
+    fetch("http://127.0.0.1:5000/api/analyze", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => drawBarChart(data.bar_data));
+}
+
+// Päivitä doughnut valitun sarakkeen mukaan
+function updateDoughnutChart() {
+    const col = document.getElementById("doughnutColumnSelect").value;
+    const file = window.lastUploadedFile;
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("doughnut_column", col);
+
+    fetch("http://127.0.0.1:5000/api/analyze", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => drawDoughnutChart(data.doughnut_data));
+}
+
+// Piirtää pylväskaavion
+function drawBarChart(bar_data) {
     if (barChart) barChart.destroy();
+    if (!bar_data || !bar_data.labels) return;
+
+    document.getElementById("barChartTitle").textContent = "// " + bar_data.label.toUpperCase();
+
+    barChart = new Chart(document.getElementById("barChart"), {
+        type: "bar",
+        data: {
+            labels: bar_data.labels,
+            datasets: [{
+                data: bar_data.values,
+                backgroundColor: CHART_COLORS.map(c => c + "66"),
+                borderColor: CHART_COLORS,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { color: "rgba(0,255,255,0.06)" }, ticks: { color: "#555577" } },
+                y: { grid: { color: "rgba(0,255,255,0.06)" }, ticks: { color: "#555577" } }
+            }
+        }
+    });
+}
+
+// Piirtää doughnut kaavion
+function drawDoughnutChart(doughnut_data) {
     if (doughnutChart) doughnutChart.destroy();
+    if (!doughnut_data || !doughnut_data.labels) return;
 
-    // Pylväskaavio
-    if (data.bar_data && data.bar_data.labels) {
-        document.getElementById("barChartTitle").textContent =
-            "// " + data.bar_data.label.toUpperCase();
+    document.getElementById("doughnutChartTitle").textContent = "// " + doughnut_data.label.toUpperCase();
 
-        barChart = new Chart(document.getElementById("barChart"), {
-            type: "bar",
-            data: {
-                labels: data.bar_data.labels,
-                datasets: [{
-                    data: data.bar_data.values,
-                    backgroundColor: CHART_COLORS.map(c => c + "66"),
-                    borderColor: CHART_COLORS,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { grid: { color: "rgba(0,255,255,0.06)" }, ticks: { color: "#555577" } },
-                    y: { grid: { color: "rgba(0,255,255,0.06)" }, ticks: { color: "#555577" } }
+    doughnutChart = new Chart(document.getElementById("doughnutChart"), {
+        type: "doughnut",
+        data: {
+            labels: doughnut_data.labels,
+            datasets: [{
+                data: doughnut_data.values,
+                backgroundColor: CHART_COLORS.map(c => c + "99"),
+                borderColor: CHART_COLORS,
+                borderWidth: 1,
+                hoverOffset: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: "65%",
+            plugins: {
+                legend: {
+                    position: "bottom",
+                    labels: { color: "#555577", boxWidth: 10, padding: 8, font: { size: 9 } }
                 }
             }
-        });
-    }
-
-    // Doughnut kaavio
-    if (data.doughnut_data && data.doughnut_data.labels) {
-        document.getElementById("doughnutChartTitle").textContent =
-            "// " + data.doughnut_data.label.toUpperCase();
-
-        doughnutChart = new Chart(document.getElementById("doughnutChart"), {
-            type: "doughnut",
-            data: {
-                labels: data.doughnut_data.labels,
-                datasets: [{
-                    data: data.doughnut_data.values,
-                    backgroundColor: CHART_COLORS.map(c => c + "99"),
-                    borderColor: CHART_COLORS,
-                    borderWidth: 1,
-                    hoverOffset: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: "65%",
-                plugins: {
-                    legend: {
-                        position: "bottom",
-                        labels: {
-                            color: "#555577",
-                            boxWidth: 10,
-                            padding: 8,
-                            font: { size: 9 }
-                        }
-                    }
-                }
-            }
-        });
-    }
+        }
+    });
 }
 
 // Piirretään kaaviot kun Analysis-näkymä avataan
