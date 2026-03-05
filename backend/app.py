@@ -162,6 +162,113 @@ def merge_files():
 
     return jsonify(result)
 
+# Laskee yhteenvedon valituista sarakkeista
+@app.route("/api/report", methods=["POST"])
+def generate_report():
+
+    if "files[]" not in request.files:
+        return jsonify({"error": "No files prvided"}), 400
+    
+    files = request.files.getlist("files[]")
+    selected_columns = request.form.getlist("columns[]")
+
+    if not selected_columns:
+        return jsonify({"error": "No columns selected"}), 400
+    
+    # Luetaan ja yhdistetään tiedostot
+    dataframes = []
+    for file in files:
+        if not allowed_file(file.filename):
+            return jsonify({"error": f"Invalid file type: {file.filename}"}), 400
+        ext = file.filename.rsplit(".", 1)[1].lower()
+        df = pd.read_csv(file) if ext == "csv" else pd.read_excel(file)
+        dataframes.append(df)
+
+    merged = pd.concat(dataframes, ignore_index=True)
+
+    # Lasketaan tilastot valituista sarakkeista
+    stats = []
+    for col in selected_columns:
+        if col not in merged.columns:
+            continue
+        col_data = merged[col].dropna()
+
+        # Numeeriset sarakkeet
+        if pd.api.types.is_numeric_dtype(col_data):
+            stats.append({
+                "column": col,
+                "type": "numeric",
+                "sum": round(float(col_data.sum()), 2),
+                "average": round(float(col_data.mean()), 2),
+                "min": round(float(col_data.min()), 2),
+                "max": round(float(col_data.max()), 2),
+                "count": int(col_data.count())
+            })
+        # Teksti sarakkeet
+        else:
+            top_values = col_data.value_counts().head(3)
+            stats.append({
+                "column": col,
+                "type": "text",
+                "unique_count": int(col_data.nunique()),
+                "top_values": top_values.index.tolist(),
+                "top_counts": top_values.values.tolist()
+            })
+
+    result = {
+        "total_rows": len(merged),
+        "total_files": len(files),
+        "stats": stats
+    }
+
+    # Tallennetaan muistiin exportia varten
+    app.config["report_data"] = merged[
+        [c for c in selected_columns if c in merged.columns]
+    ].fillna("").to_dict(orient="records")
+    app.config["report_columns"] = [c for c in selected_columns if c in merged.columns]
+
+    return jsonify(result)
+
+# Exporttaa data Excel tai CSV tiedostoon
+@app.route("/api/export", methods=["POST"])
+def export_data():
+
+    export_format = request.form.get("format", "xlsx")
+
+    # Haetaan tallennettu data
+    data = app.config.get("report_data")
+    columns = app.config.get("report_columns")
+
+    if not data:
+        return jsonify({"error": "No report data available"}), 400
+    
+    df = pd.DataFrame(data, columns=columns)
+
+    # Kirjoitetaan tiedosto muistiin
+    from io import BytesIO
+    from flask import send_file
+
+    buffer = BytesIO()
+
+    if export_format == "csv":
+        df.to_csv(buffer, index=False, encoding="utf-8-sig")
+        buffer.seek(0)
+        return send_file(
+            buffer,
+            mimetype="text/csv",
+            as_attachment=True,
+            download_name="nexus_report.csv"
+        )
+    else:
+        df.to_excel(buffer, index=False, engine="openpyxl")
+        buffer.seek(0)
+        return send_file(
+            buffer,
+            mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            as_attachment=True,
+            download_name="nexus_report.xlsx"
+        )
+
 
 # Käynnistetään serveri
 if __name__ == "__main__":
