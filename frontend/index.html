@@ -12,6 +12,7 @@
         <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
         <link rel="stylesheet" href="tyylit.css">
     </head>
     <body>
@@ -65,28 +66,28 @@
                     <div class="col-3">
                         <div class="stat-card">
                             <div class="stat-label">DATASETS LOADED</div>
-                            <div class="stat-value inactive">- NONE -</div>
+                            <div class="stat-value inactive" id="stat-datasets">- NONE -</div>
                         </div>
                     </div>
 
                     <div class="col-3">
                         <div class="stat-card">
                             <div class="stat-label">TOTAL RECORDS</div>
-                            <div class="stat-value inactive">- NONE -</div>
+                            <div class="stat-value inactive" id="stat-records">- NONE -</div>
                         </div>
                     </div>
 
                     <div class="col-3">
                         <div class="stat-card">
                             <div class="stat-label">LAST IMPORT</div>
-                            <div class="stat-value inactive">- NONE -</div>
+                            <div class="stat-value inactive" id="stat-lastimport">- NONE -</div>
                         </div>
                     </div>
 
                     <div class="col-3">
                         <div class="stat-card">
                             <div class="stat-label">SYSTEM STATUS</div>
-                            <div class="stat-value inactive">IDLE</div>
+                            <div class="stat-value inactive" id="stat-status">IDLE</div>
                         </div>
                     </div>
                 </div>
@@ -156,10 +157,45 @@
                     <div class="page-title"><span>//</span> ANALYSIS</div>
                     <div class="page-path">nexus / analysis / visualize</div>
                 </div>
-                <div class="empty-state">
+
+                <!-- Tyhjä tila kun ei dataa -->
+                <div id="analysis-empty" class="empty-state">
                     <i class="bi bi-bar-chart-line empty-icon"></i>
-                    <div class="empty-title">COMING SOON</div>
-                    <div class="empty-status">MODULE NOT YET INITIALIZED</div>
+                    <div class="empty-title">NO DATA LOADED</div>
+                    <div class="empty-status">LOAD A DATASET FIRST</div>
+                </div>
+
+                <!-- Kaaviot kun data on ladattu -->
+                <div id="analysis-content" style="display: none;">
+                    <div class="row g-3">
+
+                        <!-- Pylväskaavio -->
+                        <div class="col-8">
+                            <div class="chart-card">
+                                <div class="chart-card-header">
+                                    <span class="chart-card-title" id="barChartTitle">BAR CHART</span>
+                                    <span class="chart-card-badge">BAR</span>
+                                </div>
+                                <div class="chart-wrapper">
+                                    <canvas id="barChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doughnut kaavio -->
+                        <div class="col-4">
+                            <div class="chart-card">
+                                <div class="chart-card-header">
+                                    <span class="chart-card-title" id="doughnutChartTitle">DOUGHNUT</span>
+                                    <span class="chart-card-badge">DOUGHNUT</span>
+                                </div>
+                                <div class="chart-wrapper">
+                                    <canvas id="doughnutChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
 
