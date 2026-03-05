@@ -1,0 +1,21 @@
+company_name,sector,market_value_credits,employees,security_rating,headquarters,status
+Arasaka Corporation,Military,10240000000,268000,5,Neo Tokyo,Active
+Militech International,Military,7980000000,210000,5,Night City,Active
+Biotechnica,Biotech,4890000000,94000,4,New Shanghai,Active
+Petrochem,Energy,3650000000,98000,3,Night City,Active
+Kang Tao,Military,3920000000,82000,4,New Shanghai,Active
+Zetatech,Technology,3210000000,61000,3,Neo Tokyo,Active
+Night Corp,Infrastructure,2580000000,47000,3,Night City,Active
+Trauma Team,Medical,2340000000,35000,4,Night City,Active
+Rocklin Augmetics,Biotech,1920000000,30000,3,Neo Tokyo,Active
+SovOil,Energy,1430000000,63000,2,New Shanghai,Active
+Danger Gal,Security,1120000000,14000,4,Night City,Active
+Dynalar Technologies,Technology,950000000,10500,3,Neo Tokyo,Active
+Orbital Air,Transport,820000000,9200,2,Night City,Active
+Lazarus Group,Military,710000000,8100,5,Unknown,Shadow
+NetWatch,Security,590000000,4700,5,Unknown,Active
+Microtech,Technology,470000000,5900,2,Neo Tokyo,Active
+EBM,Technology,410000000,4400,2,New Shanghai,Active
+Villefort,Biotech,320000000,3500,3,Night City,Active
+Unification Church,Unknown,210000000,1400,1,Unknown,Shadow
+Black Ops Division,Military,0,520,5,Unknown,Shadow
