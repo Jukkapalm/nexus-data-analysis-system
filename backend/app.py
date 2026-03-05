@@ -157,7 +157,7 @@ def merge_files():
     result = {
         "rows": len(merged),
         "columns": list(merged.columns),
-        "preview": merged.head(10).to_dict(orient="records")
+        "preview": merged.head(100).fillna("").to_dict(orient="records")
     }
 
     return jsonify(result)
