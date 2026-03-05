@@ -226,10 +226,62 @@
                     <div class="page-title"><span>//</span> DATA MERGE</div>
                     <div class="page-path">nexu / merge / combine</div>
                 </div>
-                <div class="empty-state">
+
+                <!-- Tyhjä tila kun ei tiedostoja ladattu -->
+                <div id="merge-empty" class="empty-state">
                     <i class="bi bi-intersect empty-icon"></i>
-                    <div class="empty-title">COMING SOON</div>
-                    <div class="empty-status">MODULE NOT YET INITIALIZED</div>
+                    <div class="empty-title">NO FILES LOADED</div>
+                    <div class="empty-status">LOAD AT LEAST 2 DATASETS FIRST</div>
+                </div>
+
+                <!-- Merge sisältö -->
+                <div id="merge-content" style="display: none;">
+                    <div class="row g-4">
+
+                        <!-- Vasen: tiedostojen valinta -->
+                        <div class="col-5">
+                            <div class="chart-card">
+                                <div class="chart-card-header">
+                                    <span class="chart-card-title">// SELECT DATASETS TO MERGE</span>
+                                </div>
+                                <div id="mergeFileList"></div>
+                            </div>
+
+                            <!-- Merge tyyppi -->
+                            <div class="chart-card mt-3">
+                                <div class="chart-card-header">
+                                    <span class="chart-card-title">// MERGE TYPE</span>
+                                </div>
+                                <div class="d-flex gap-2 mt-2">
+                                    <button class="merge-type-btn active" id="btnStack" onclick="setMergeType('stack')">// STACK</button>
+                                    <button class="merge-type-btn" id="btnJoin" onclick="setMergeType('join')">// JOIN</button>
+                                </div>
+                                <div class="merge-type-desc mt-2" id="mergeTypeDesc">Pinoa tiedostot päällekkäin - samat sarakkeet yhdistyvät</div>
+
+                                <!-- Join sarake valitsin - näkyy vain join-modessa -->
+                                <div id="joinColumnWrapper" style="display: none;" class="mt-2">
+                                    <div class="section-label">// JOIN COLUMN</div>
+                                    <select id="joinColumnSelect" class="nexus-select"></select>
+                                </div>
+                            </div>
+
+                            <button class="execute-btn mt-3" onclick="executeMerge()">// EXECUTE MERGE</button>
+                        </div>
+
+                        <!-- Oikea: esikatselu -->
+                        <div class="col-7">
+                            <div class="chart-card">
+                                <div class="chart-card-header">
+                                    <span class="chart-card-title">// MERGE PREVIEW</span>
+                                    <span class="chart-card-badge" id="mergePreviewBadge">AWAITING</span>
+                                </div>
+                                <div id="mergePreview">
+                                    <div class="merge-awaiting">// select files and execute merge</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
 
