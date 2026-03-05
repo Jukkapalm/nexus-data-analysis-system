@@ -780,12 +780,79 @@ body {
     line-height: 2;
     padding: clamp(0.5rem, 1vw, 1rem) 0;
     min-height: clamp(200px, 25vw, 350px);
+    max-height: clamp(300px, 40vh, 500px);
+    overflow-y: auto;
+    scroll-behavior: smooth;
 }
 .reports-terminal .t-line { color: var(--text-dim); }
 .reports-terminal .t-success { color: var(--green); }
 .reports-terminal .t-cyan { color: var(--cyan); }
 .reports-terminal .t-pink { color: var(--pink); }
 .reports-terminal .t-value { color: var(--cyan); font-weight: 700; }
+
+/* Custom alert tyylit */
+.nexus-alert {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.nexus-alert-box {
+    background: var(--bg-panel);
+    border: 1px solid var(--pink);
+    padding: 2rem;
+    min-width: 300px;
+    position: relative;
+}
+.nexus-alert-box::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 24px; height: 24px;
+    border-top: 2px solid var(--pink);
+    border-left: 2px solid var(--pink);
+}
+.nexus-alert-box::after {
+    content: "";
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 24px; height: 24px;
+    border-bottom: 2px solid var(--pink);
+    border-right: 2px solid var(--pink);
+}
+.nexus-alert-title {
+    font-family: "Orbitron", monospace;
+    font-size: 0.7rem;
+    color: var(--pink);
+    letter-spacing: 3px;
+    margin-bottom: 1rem;
+}
+.nexus-alert-msg {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.65rem;
+    color: var(--text);
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+}
+.nexus-alert-btn {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.65rem;
+    color: var(--bg-dark);
+    background: var(--pink);
+    border: none;
+    padding: 0.5rem 1.5rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.nexus-alert-btn:hover {
+    background: var(--violet);
+    box-shadow: 0 0 15px rgba(157, 0, 255, 0.4);
+}
 
 @keyframes glitch {
     0%, 95%, 100% { text-shadow: 0 0 20px rgba(0, 255, 255, 0.6); transform: none; }
