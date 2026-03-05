@@ -614,6 +614,25 @@ body {
     height: clamp(200px, 25vw, 320px);
 }
 
+/* Analysis sarakevalitsimet */
+.nexus-select {
+    width: 100%;
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    color: var(--cyan);
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(0.5rem, 0.7vw, 0.65rem);
+    letter-spacing: 1px;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    outline: none;
+}
+.nexus-select:hover { border-color: var(--cyan); }
+.nexus-select option {
+    background: var(--bg-panel);
+    color: var(--text);
+}
+
 @keyframes glitch {
     0%, 95%, 100% { text-shadow: 0 0 20px rgba(0, 255, 255, 0.6); transform: none; }
     96% { text-shadow: -2px 0 var(--pink), 2px 0 var(--cyan); transform: skewX(-1deg); }
