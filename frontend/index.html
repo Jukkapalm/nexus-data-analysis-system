@@ -167,6 +167,27 @@
 
                 <!-- Kaaviot kun data on ladattu -->
                 <div id="analysis-content" style="display: none;">
+
+                    <!-- Sarakevalitsimet -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <div class="chart-card">
+                                <div class="chart-card-header">
+                                    <span class="chart-card-title">// SELECT COLUMN - BAR CHART</span>
+                                </div>
+                                <select id="barColumnSelect" class="nexus-select" onchange="updateBarChart()"></select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="chart-card">
+                                <div class="chart-card-header">
+                                    <span class="chart-card-title">// SELECT COLUMN - DOUGHNUT</span>
+                                </div>
+                                <select id="doughnutColumnSelect" class="nexus-select" onchange="updateDoughnutChart()"></select>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row g-3">
 
                         <!-- Pylväskaavio -->
