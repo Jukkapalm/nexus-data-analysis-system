@@ -633,6 +633,116 @@ body {
     color: var(--text);
 }
 
+/* Data Merge */
+.merge-type-btn {
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(0.5rem, 0.7vw, 0.65rem);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    background: transparent;
+    padding: clamp(0.4rem, 0.8vw, 0.6rem) clamp(0.75rem, 1.2vw, 1rem);
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.merge-type-btn:hover {
+    color: var(--cyan);
+    border-color: var(--cyan);
+}
+.merge-type-btn.active {
+    color: var(--cyan);
+    border-color: var(--cyan);
+    background: rgba(0, 255, 255, 0.08);
+}
+.merge-type-desc {
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(0.45rem, 0.6vw, 0.6rem);
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    opacity: 0.7;
+}
+.execute-btn {
+    width: 100%;
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(0.55rem, 0.75vw, 0.7rem);
+    color: var(--bg-dark);
+    background: var(--cyan);
+    border: none;
+    padding: clamp(0.6rem, 1vw, 0.85rem);
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 700;
+}
+.execute-btn:hover {
+    background: var(--violet);
+    box-shadow: 0 0 20px rgba(157, 0, 255, 0.4);
+}
+.merge-file-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: clamp(0.5rem, 0.8vw, 0.7rem);
+    border: 1px solid var(--border);
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.merge-file-item:hover { border-color: rgba(0, 255, 255, 0.3); }
+.merge-file-item.selected {
+    border-color: var(--cyan);
+    background: rgba(0, 255, 255, 0.05);
+}
+.merge-file-item input[type="checkbox"] { accent-color: var(--cyan); }
+.merge-file-name {
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(0.5rem, 0.65vw, 0.65rem);
+    color: var(--text);
+    letter-spacing: 1px;
+}
+.merge-awaiting {
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(0.5rem, 0.65vw, 0.65rem);
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    opacity: 0.5;
+    padding: clamp(1rem, 2vw, 1.5rem);
+    text-align: center;
+}
+.merge-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(0.45rem, 0.6vw, 0.6rem);
+}
+.merge-table th {
+    color: var(--cyan);
+    border-bottom: 1px solid var(--border);
+    padding: 0.4rem 0.6rem;
+    text-align: left;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+.merge-table td {
+    color: var(--text-dim);
+    border-bottom: 1px solid rgba(0, 255, 255, 0.05);
+    padding: 0.4rem 0.6rem;
+    white-space: nowrap;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.merge-table tr:hover td {
+    color: var(--text);
+    background: rgba(0, 255, 255, 0.03);
+}
+.merge-preview-wrapper {
+    overflow-x: auto;
+    max-height: clamp(300px, 35vw, 450px);
+    overflow-y: auto;
+    display: block;
+}
+
 @keyframes glitch {
     0%, 95%, 100% { text-shadow: 0 0 20px rgba(0, 255, 255, 0.6); transform: none; }
     96% { text-shadow: -2px 0 var(--pink), 2px 0 var(--cyan); transform: skewX(-1deg); }
