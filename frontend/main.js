@@ -502,8 +502,34 @@ function executeMerge() {
 function renderMergePreview(data) {
     document.getElementById("mergePreviewBadge").textContent = data.rows + " ROWS / " + data.columns.length + " COLS";
 
+    const container = document.getElementById("mergePreview");
+    container.innerHTML = "";
+
+    // Sarakevalitsimet
+    const colSelector = document.createElement("div");
+    colSelector.className = "col-selector";
+    colSelector.innerHTML = `
+        <div class="section-label mt-2">// SELECT COLUMNS FOR REPORT</div>
+        <div id="columnCheckboxes" class="col-checkboxes"></div>
+        <button class="execute-btn mt-2" onclick="sendToReports()">// SEND TO REPORTS</button>
+    `;
+    container.appendChild(colSelector);
+
+    // Täytetään sarakevalitsimet
+    const checkboxContainer = colSelector.querySelector("#columnCheckboxes");
+    data.columns.forEach(col => {
+        const label = document.createElement("label");
+        label.className = "col-checkbox-item";
+        label.innerHTML = `
+            <input type="checkbox" value="${col}" checked>
+            <span>${col.toUpperCase()}</span>
+        `;
+        checkboxContainer.appendChild(label);
+    });
+
+    // Esikatselu taulukko
     const wrapper = document.createElement("div");
-    wrapper.className = "merge-preview-wrapper";
+    wrapper.className = "merge-preview-wrapper mt-3";
 
     const table = document.createElement("table");
     table.className = "merge-table";
@@ -521,15 +547,16 @@ function renderMergePreview(data) {
     data.preview.forEach(row => {
         const tr = document.createElement("tr");
         tr.innerHTML = data.columns.map(col => 
-            `<td>${row[col] !== null ? row[col] : "-"}</td>`
+            `<td>${row[col] !== null && row[col] !== undefined ? row[col] : "-"}</td>`
         ).join("");
         tbody.appendChild(tr);
     });
     table.appendChild(tbody);
     wrapper.appendChild(table);
+    container.appendChild(wrapper);
 
-    document.getElementById("mergePreview").innerHTML = "";
-    document.getElementById("mergePreview").appendChild(wrapper);
+    /*document.getElementById("mergePreview").innerHTML = "";
+    document.getElementById("mergePreview").appendChild(wrapper);*/
 }
 
 // Päivitetään showView jotta merge lista päivittyy
@@ -541,4 +568,168 @@ window.showView = function(name) {
     }
 };
 
-merge-file-name
+// lähettää valitut sarakkeet Reports-näkymään
+function sendToReports() {
+    const selected = Array.from(
+        document.querySelectorAll("#columnCheckboxes input:checked")
+    ).map(cb => cb.value);
+
+    if (selected.length === 0) {
+        alert("Valitse vähintään yksi sarake!");
+        return;
+    }
+
+    const filesToMerge = window.uploadedFiles 
+        ? window.uploadedFiles.filter(f => 
+            Array.from(document.querySelectorAll("#mergeFileList input:checked"))
+                .map(cb => cb.value)
+                .includes(f.name)
+        )
+        : [];
+
+    if (filesToMerge.length < 2) {
+        alert("Tiedostoja ei löydy muistista!");
+        return;
+    }
+
+    const formData = new FormData();
+    filesToMerge.forEach(f => formData.append("files[]", f));
+    selected.forEach(col => formData.append("columns[]", col));
+
+    fetch("http://127.0.0.1:5000/api/report", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("Report vastasi:", data);
+        window.reportData = data;
+        window.reportFiles = filesToMerge;
+        window.reportColumns = selected;
+        showView("reports");
+    })
+    .catch(err => console.error("Report virhe:", err));
+}
+
+// Reports toiminnallisuus
+// Export formaatti
+let currentExportFormat = "xlsx";
+
+// Vaihda export formaatti
+function setExportFormat(format) {
+    currentExportFormat = format;
+    document.getElementById("btnXlsx").classList.toggle("active", format === "xlsx");
+    document.getElementById("btnCsv").classList.toggle("active", format === "csv");
+}
+
+// Typewriter efekti
+function typewriterEffect(lines, index = 0) {
+    if (index >= lines.length) {
+        document.getElementById("reportsBadge").textContent = "COMPLETE";
+        return;
+    }
+
+    const terminal = document.getElementById("reportsTerminal");
+    const line = lines[index];
+
+    const div = document.createElement("div");
+    div.className = line.cls;
+    terminal.appendChild(div);
+
+    let charIndex = 0;
+    const interval = setInterval(() => {
+        div.textContent += line.text[charIndex];
+        charIndex++;
+        if (charIndex >= line.text.length) {
+            clearInterval(interval);
+            setTimeout(() => typewriterEffect(lines, index + 1), line.pause || 100);
+        }
+    }, 18);
+}
+
+// Rakentaa terminaali rivit report datasta
+function buildReportLines(data) {
+    const lines = [];
+
+    lines.push({ text: "> NEXUS REPORT SYSTEM INITIALIZED...", cls: "t-line", pause: 200 });
+    lines.push({ text: "> PROCESSING MERGED DATASET...", cls: "t-line", pause: 200 });
+    lines.push({ text: "> ─────────────────────────────────", cls: "t-line", pause: 100 });
+    lines.push({ text: `> TOTAL FILES MERGED: ${data.total_files}`, cls: "t-cyan", pause: 150 });
+    lines.push({ text: `> TOTAL ROWS: ${data.total_rows.toLocaleString()}`, cls: "t-cyan", pause: 200 });
+    lines.push({ text: "> ─────────────────────────────────", cls: "t-line", pause: 100 });
+
+    data.stats.forEach(stat => {
+        lines.push({ text: `> COLUMN: ${stat.column.toUpperCase()}`, cls: "t-cyan", pause: 150 });
+
+        if (stat.type === "numeric") {
+            lines.push({ text: `>   SUM:     ${stat.sum.toLocaleString()}`, cls: "t-value", pause: 100 });
+            lines.push({ text: `>   AVERAGE: ${stat.average.toLocaleString()}`, cls: "t-value", pause: 100 });
+            lines.push({ text: `>   MIN:     ${stat.min.toLocaleString()}`, cls: "t-value", pause: 100 });
+            lines.push({ text: `>   MAX:     ${stat.max.toLocaleString()}`, cls: "t-value", pause: 150 });
+        } else {
+            lines.push({ text: `>   UNIQUE VALUES: ${stat.unique_count}`, cls: "t-value", pause: 100 });
+            stat.top_values.forEach((val, i) => {
+                lines.push({ text: `>   #${i + 1}: ${val} (${stat.top_counts[i]}x)`, cls: "t-value", pause: 80 });
+            });
+        }
+        lines.push({ text: "> ─────────────────────────────────", cls: "t-line", pause: 100 });
+    });
+
+    lines.push({ text: "> REPORT COMPLETE.", cls: "t-success", pause: 0 });
+
+    return lines;
+}
+
+// Näyttää report datan kirjoituskone-efektillä
+function renderReports(data) {
+    document.getElementById("reports-empty").style.display = "none";
+    document.getElementById("reports-content").style.display = "block";
+
+    const terminal = document.getElementById("reportsTerminal");
+    terminal.innerHTML = "";
+    document.getElementById("reportsBadge").textContent = "PROCESSING";
+
+    const lines = buildReportLines(data);
+    typewriterEffect(lines);
+}
+
+// Exporttaa data tiedostoon
+function exportData() {
+    const files = window.reportFiles;
+    const columns = window.reportColumns;
+
+    if (!files || !columns) {
+        alert("Ei exportattavaa dataa — lähetä ensin data Reportsiin!");
+        return;
+    }
+
+    const formData = new FormData();
+    files.forEach(f => formData.append("files[]", f));
+    columns.forEach(col => formData.append("columns[]", col));
+    formData.append("format", currentExportFormat);
+
+    fetch("http://127.0.0.1:5000/api/export", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.blob())
+    .then(blob => {
+        // Luodaan latauslinkki
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "nexus_report." + currentExportFormat;
+        a.click();
+        URL.revokeObjectURL(url);
+    })
+    .catch(err => console.error("Export virhe:", err));
+}
+
+// Päivitetään showView Reports-näkymälle
+const __showView = window.showView;
+window.showView = function(name) {
+    __showView(name);
+    if (name === "reports" && window.reportData) {
+        setTimeout(() => renderReports(window.reportData), 50);
+    }
+};
