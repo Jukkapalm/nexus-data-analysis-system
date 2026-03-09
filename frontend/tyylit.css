@@ -58,7 +58,7 @@ body {
 }
 .sidebar-logo .logo-title {
     font-family: "Orbitron", monospace;
-    font-size: clamp(1rem, 1.8vw, 1.5rem);
+    font-size: clamp(1.15rem, 1.9vw, 1.65rem);
     font-weight: 900;
     color: var(--cyan);
     letter-spacing: 4px;
@@ -67,7 +67,7 @@ body {
 }
 .sidebar-logo .logo-sub {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.45rem, 0.7vw, 0.6rem);
+    font-size: clamp(0.7rem, 0.9vw, 0.85rem);
     color: var(--text-dim);
     letter-spacing: 2px;
     margin-top: 0.25rem;
@@ -82,8 +82,8 @@ body {
     gap: 0.5rem;
 }
 .status-dot {
-    width: clamp(5px, 0.4vw, 7px);
-    height: clamp(5px, 0.4vw, 7px);
+    width: clamp(6px, 0.5vw, 8px);
+    height: clamp(6px, 0.5vw, 8px);
     border-radius: 50%;
     background: var(--cyan);
     box-shadow: 0 0 8px var(--cyan);
@@ -92,7 +92,7 @@ body {
 }
 .status-text {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.5rem, 0.65vw, 0.65rem);
+    font-size: clamp(0.75rem, 0.9vw, 0.9rem);
     color: var(--text-dim);
     letter-spacing: 1px;
 }
@@ -102,9 +102,9 @@ body {
     padding: clamp(0.75rem, 1.5vw, 1.25rem);
     flex: 1;
 }
-.nav-section-label {
+.nav-selection-label {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.45rem, 0.6vw, 0.6rem);
+    font-size: clamp(0.75rem, 0.8vw, 0.9rem);
     color: var(--text-dim);
     letter-spacing: 3px;
     padding: 0 clamp(1rem, 1.5vw, 1.25rem) 0.5rem;
@@ -118,7 +118,7 @@ body {
     color: var(--text-dim);
     text-decoration: none;
     font-family: "Rajdhani", sans-serif;
-    font-size: clamp(0.8rem, 1vw, 1rem);
+    font-size: clamp(1.05rem, 1.2vw, 1.25rem);
     font-weight: 500;
     letter-spacing: 1px;
     border-left: 2px solid transparent;
@@ -126,7 +126,7 @@ body {
     position: relative;
 }
 .nav-item-link i {
-    font-size: clamp(0.85rem, 1.1vw, 1.1rem);
+    font-size: clamp(1rem, 1.2vw, 1.25rem);
     width: 1.2rem;
     text-align: center;
     flex-shrink: 0;
@@ -149,7 +149,7 @@ body {
 .nav-item-link.active::after {
     content: "//";
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.45rem, 0.6vw, 0.6rem);
+    font-size: clamp(0.8rem, 0.9vw, 1rem);
     color: var(--cyan);
     opacity: 0.5;
     margin-left: auto;
@@ -162,7 +162,7 @@ body {
 }
 .sidebar-footer .version {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.45rem, 0.6vw, 0.6rem);
+    font-size: clamp(0.75rem, 0.8vw, 0.9rem);
     color: var(--text-dim);
     letter-spacing: 1px;
 }
@@ -174,7 +174,7 @@ body {
     padding: clamp(1.5rem, 3vw, 2.5rem);
     color: var(--text-dim);
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.65rem, 0.8vw, 0.8rem);
+    font-size: clamp(0.95rem, 1vw, 1.1rem);
     min-height: 100vh;
 }
 
@@ -190,7 +190,7 @@ body {
 }
 .page-title {
     font-family: "Orbitron", monospace;
-    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+    font-size: clamp(1.25rem, 1.8vw, 1.55rem);
     font-weight: 700;
     color: var(--text);
     letter-spacing: 3px;
@@ -199,7 +199,7 @@ body {
 
 .page-path {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.5rem, 0.65vw, 0.65rem);
+    font-size: clamp(0.75rem, 0.85vw, 0.9rem);
     color: var(--text-dim);
     letter-spacing: 1px;
     margin-top: 0.25rem;
@@ -237,14 +237,14 @@ body {
 }
 .stat-label {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.5rem, 0.65vw, 0.65rem);
+    font-size: clamp(0.75rem, 0.85vw, 0.9rem);
     color: var(--text-dim);
     letter-spacing: 2px;
     margin-bottom: 0.5rem;
 }
 .stat-value {
     font-family: "Orbitron", monospace;
-    font-size: clamp(1rem, 2vw, 1.6rem);
+    font-size: clamp(1.2rem, 2.2vw, 1.8rem);
     font-weight: 700;
     color: var(--cyan);
     text-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
@@ -252,7 +252,7 @@ body {
 .stat-value.inactive {
     color: var(--text-dim);
     text-shadow: none;
-    font-size: clamp(0.7rem, 1vw, 0.9rem);
+    font-size: clamp(0.85rem, 1.1vw, 1.05rem);
     font-family: "JetBrains Mono", monospace;
     font-weight: 400;
 }
@@ -267,7 +267,7 @@ body {
 .empty-state {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    padding: clamp(3rem, 6vw, 5rem) clamp(2rem, 4vw, 3rem);
+    padding: clamp(1rem, 2vw, 1.5rem) clamp(2rem, 4vw, 3rem);
     text-align: center;
     position: relative;
     margin-top: clamp(1rem, 2vw, 1.5rem);
@@ -311,7 +311,7 @@ body {
 }
 .empty-status {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.6rem, 0.85vw, 0.8rem);
+    font-size: clamp(0.7rem, 0.9vw, 0.9rem);
     color: var(--text-dim);
     letter-spacing: 2px;
     margin-bottom: 0.5rem;
@@ -322,7 +322,7 @@ body {
 }
 .empty-hint {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.5rem, 0.7vw, 0.65rem);
+    font-size: clamp(0.65rem, 0.85vw, 0.8rem);
     color: var(--text-dim);
     opacity: 0.5rem;
     margin-top: clamp(1.5rem, 2.5vw, 2rem);
@@ -371,7 +371,7 @@ body {
     box-shadow: 0 0 30px rgba(0, 255, 255, 0.1), inset 0 0 30px rgba(0, 255, 255, 0.05);
 }
 .dropzone-icon {
-    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-size: clamp(1.6rem, 2.5vw, 3.1rem);
     color: var(--cyan);
     opacity: 0.5;
     margin-bottom: clamp(0.75rem, 1.5vw, 1.25rem);
@@ -388,7 +388,7 @@ body {
 }
 .dropzone-title {
     font-family: "Orbitron", monospace;
-    font-size: clamp(0.8rem, 1.3vw, 1.1rem);
+    font-size: clamp(0.9rem, 1.4vw, 1.2rem);
     font-weight: 700;
     color: var(--text);
     letter-spacing: 3px;
@@ -396,7 +396,7 @@ body {
 }
 .dropzone-sub {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.5rem, 0.7vw, 0.65rem);
+    font-size: clamp(0.65rem, 0.85vw, 0.8rem);
     color: var(--text-dim);
     letter-spacing: 1px;
     margin-bottom: clamp(1rem, 2vw, 1.5rem);
@@ -409,7 +409,7 @@ body {
 }
 .format-badge {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.5rem, 0.65vw, 0.6rem);
+    font-size: clamp(0.6rem, 0.75vw, 0.7rem);
     color: var(--cyan);
     border: 1px solid rgba(0, 255, 255, 0.3);
     padding: 0.2rem 0.6rem;
@@ -420,7 +420,7 @@ body {
 /* Data Import Sample nappi */
 .sample-btn {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.55rem, 0.75vw, 0.7rem);
+    font-size: clamp(0.7rem, 0.9vw, 0.85rem);
     color: var(--violet);
     border: 1px solid rgba(157, 0, 255, 0.4);
     background: transparent;
@@ -474,8 +474,8 @@ body {
     margin-bottom: clamp(0.75rem, 1.2vw, 1rem);
 }
 .analyzing-dot {
-    width: clamp(6px, 0.5vw, 8px);
-    height: clamp(6px, 0.5vw, 8px);
+    width: clamp(7px, 0.6vw, 9px);
+    height: clamp(7px, 0.6vw, 9px);
     border-radius: 50%;
     background: var(--cyan);
     box-shadow: 0 0 10px var(--cyan);
@@ -484,7 +484,7 @@ body {
 }
 .analyzing-title {
     font-family: "Orbitron", monospace;
-    font-size: clamp(0.7rem, 1.1vw, 0.95rem);
+    font-size: clamp(0.85rem, 1.2vw, 1.1rem);
     font-weight: 700;
     color: var(--cyan);
     letter-spacing: 4px;
@@ -492,7 +492,7 @@ body {
 }
 .analyzing-log {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.5rem, 0.7vw, 0.65rem);
+    font-size: clamp(0.65rem, 0.8vw, 0.8rem);
     color: var(--text-dim);
     letter-spacing: 1px;
     line-height: 1.8;
@@ -505,7 +505,7 @@ body {
 .files-section { margin-top: clamp(1rem, 2vw, 1.5rem); }
 .section-label {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.5rem, 0.65vw, 0.65rem);
+    font-size: clamp(0.75rem, 0.85vw, 0.9rem);
     color: var(--text-dim);
     letter-spacing: 3px;
     margin-bottom: clamp(0.5rem, 1vw, 0.75rem);
@@ -532,20 +532,20 @@ body {
 }
 .file-item-name {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.55rem, 0.75vw, 0.7rem);
+    font-size: clamp(0.7rem, 0.85vw, 0.85rem);
     color: var(--text);
     flex: 1;
     letter-spacing: 1px;
 }
 .file-item-meta {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.45rem, 0.6vw, 0.6rem);
+    font-size: clamp(0.6rem, 0.7vw, 0.75rem);
     color: var(--text-dim);
     letter-spacing: 1px;
 }
 .file-item-status {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.45rem, 0.6vw, 0.6rem);
+    font-size: clamp(0.6rem, 0.7vw, 0.75rem);
     color: var(--green);
     letter-spacing: 1px;
 }
@@ -554,7 +554,7 @@ body {
     border: none;
     color: var(--text-dim);
     cursor: pointer;
-    font-size: clamp(0.7rem, 1vw, 0.9rem);
+    font-size: clamp(0.85rem, 1.1vw, 1.05rem);
     padding: 0;
     transition: all 0.2s ease;
     flex-shrink: 0;
@@ -562,7 +562,7 @@ body {
 .file-item-remove:hover { color: var(--pink); }
 .files-empty {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.5rem, 0.65vw, 0.6rem);
+    font-size: clamp(0.65rem, 0.75vw, 0.75rem);
     color: var(--text-dim);
     letter-spacing: 1px;
     opacity: 0.5;
@@ -588,6 +588,16 @@ body {
     border-top: 2px solid var(--cyan);
     border-left: 2px solid var(--cyan);
 }
+.chart-card::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: clamp(20px, 2vw, 28px);
+    height: clamp(20px, 2vw, 28px);
+    border-bottom: 2px solid var(--cyan);
+    border-right: 2px solid var(--cyan);
+}
 .chart-card-header {
     display: flex;
     align-items: center;
@@ -597,13 +607,13 @@ body {
 }
 .chart-card-title {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.5rem, 0.65vw, 0.65rem);
+    font-size: clamp(0.7rem, 0.8vw, 0.85rem);
     color: var(--text-dim);
     letter-spacing: 2px;
 }
 .chart-card-badge {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.4rem, 0.55vw, 0.55rem);
+    font-size: clamp(0.65rem, 0.75vw, 0.8rem);
     color: var(--violet);
     border: 1px solid rgba(157, 0, 255, 0.3);
     padding: 0.1rem 0.5rem;
@@ -621,7 +631,7 @@ body {
     border: 1px solid var(--border);
     color: var(--cyan);
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.5rem, 0.7vw, 0.65rem);
+    font-size: clamp(0.7rem, 0.8vw, 0.85rem);
     letter-spacing: 1px;
     padding: 0.4rem 0.6rem;
     cursor: pointer;
@@ -636,7 +646,7 @@ body {
 /* Data Merge */
 .merge-type-btn {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.5rem, 0.7vw, 0.65rem);
+    font-size: clamp(0.65rem, 0.8vw, 0.8rem);
     color: var(--text-dim);
     border: 1px solid var(--border);
     background: transparent;
@@ -656,7 +666,7 @@ body {
 }
 .merge-type-desc {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.45rem, 0.6vw, 0.6rem);
+    font-size: clamp(0.65rem, 0.7vw, 0.8rem);
     color: var(--text-dim);
     letter-spacing: 1px;
     opacity: 0.7;
@@ -664,7 +674,7 @@ body {
 .execute-btn {
     width: 100%;
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.55rem, 0.75vw, 0.7rem);
+    font-size: clamp(0.7rem, 0.85vw, 0.85rem);
     color: var(--bg-dark);
     background: var(--cyan);
     border: none;
@@ -696,13 +706,13 @@ body {
 .merge-file-item input[type="checkbox"] { accent-color: var(--cyan); }
 .merge-file-name {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.5rem, 0.65vw, 0.65rem);
+    font-size: clamp(0.7rem, 0.8vw, 0.85rem);
     color: var(--text);
     letter-spacing: 1px;
 }
 .merge-awaiting {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.5rem, 0.65vw, 0.65rem);
+    font-size: clamp(0.65rem, 0.75vw, 0.8rem);
     color: var(--text-dim);
     letter-spacing: 1px;
     opacity: 0.5;
@@ -713,7 +723,7 @@ body {
     width: 100%;
     border-collapse: collapse;
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.45rem, 0.6vw, 0.6rem);
+    font-size: clamp(0.6rem, 0.7vw, 0.75rem);
 }
 .merge-table th {
     color: var(--cyan);
@@ -755,7 +765,7 @@ body {
     align-items: center;
     gap: 0.4rem;
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.45rem, 0.6vw, 0.6rem);
+    font-size: clamp(0.6rem, 0.7vw, 0.75rem);
     color: var(--text-dim);
     letter-spacing: 1px;
     cursor: pointer;
@@ -774,7 +784,7 @@ body {
 /* Reports terminaali */
 .reports-terminal {
     font-family: "JetBrains Mono", monospace;
-    font-size: clamp(0.5rem, 0.7vw, 0.65rem);
+    font-size: clamp(0.7rem, 0.85vw, 0.85rem);
     color: var(--text-dim);
     letter-spacing: 1px;
     line-height: 2;
@@ -789,6 +799,7 @@ body {
 .reports-terminal .t-cyan { color: var(--cyan); }
 .reports-terminal .t-pink { color: var(--pink); }
 .reports-terminal .t-value { color: var(--cyan); font-weight: 700; }
+.reports-terminal .t-danger { color: var(--pink); }
 
 /* Custom alert tyylit */
 .nexus-alert {
@@ -852,6 +863,22 @@ body {
 .nexus-alert-btn:hover {
     background: var(--violet);
     box-shadow: 0 0 15px rgba(157, 0, 255, 0.4);
+}
+
+/* Scrollbar tyylit */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--cyan);
+    opacity: 0.4;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--violet);
 }
 
 @keyframes glitch {
