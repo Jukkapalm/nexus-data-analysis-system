@@ -177,8 +177,8 @@ function removeFile(btn) {
 // Lataa sample data
 function loadSampleData() {
     const samples = [
-        { name: "neo_tokyo-corps_2077.csv", size: "42 KB" },
-        { name: "blackmarket_transactions.xlsx", size: "128 KB" },
+        "blackmarket_transactions_2077.xlsx",
+        "blackmarket_transactions_2078.xlsx"
     ];
 
     analyzingBox.style.display = "block";
@@ -187,8 +187,8 @@ function loadSampleData() {
     const logs = [
         { text: '> loading sample dataset...', delay: 0, cls: 'log-line' },
         { text: '> decrypting data streams...', delay: 500, cls: 'log-line active' },
-        { text: '> neo_tokyo_corps_2077.csv — OK', delay: 1200, cls: 'log-line success' },
-        { text: '> blackmarket_transactions.xlsx — OK', delay: 1800, cls: 'log-line success' },
+        { text: '> blackmarket_transactions_2077.xlsx — OK', delay: 1200, cls: 'log-line success' },
+        { text: '> blackmarket_transactions_2078.xlsx — OK', delay: 1800, cls: 'log-line success' },
         { text: '> sample data loaded.', delay: 2400, cls: 'log-line success' },
     ];
 
@@ -202,10 +202,20 @@ function loadSampleData() {
         }, log.delay);
     });
 
+    // Haetaan tiedostot backendistä ja käsitellään oikeina File-objekteina
     setTimeout(() => {
         analyzingBox.style.display = "none";
         analyzingLog.innerHTML = "";
-        samples.forEach(f => addFileToList(f.name, f.size));
+
+        const fetchPromises = samples.map(filename => 
+            fetch("/api/sample/" + filename)
+                .then(res => res.blob())
+                .then(blob => new File([blob], filename, { type: blob.type }))
+        );
+
+        Promise.all(fetchPromises).then(files => {
+            handleFiles(files);
+        })
     }, 3500);
 }
 

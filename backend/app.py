@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import pandas as pd
 import os
@@ -16,10 +16,18 @@ ALLOWED_EXTENSIONS = {"xlsx", "xls", "csv"}
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# Testataan että serveri toimii
+
 @app.route("/")
 def index():
-    return "NEXUS ONLINE"
+    return send_from_directory("../frontend", "index.html")
+
+@app.route("/<path:filename>")
+def static_files(filename):
+    return send_from_directory("../frontend", filename)
+
+@app.route("/api/sample/<filename>")
+def serve_sample(filename):
+    return send_from_directory("../sample-data", filename)
 
 # Tiedoston lähetys ja analysointi
 @app.route("/api/upload", methods=["POST"])
@@ -387,4 +395,4 @@ def export_data():
 
 # Käynnistetään serveri
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
