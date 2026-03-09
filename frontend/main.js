@@ -81,7 +81,7 @@ function handleFiles(files) {
         formData.append("file", file);
 
         // Lähetetään tiedosto uploadille
-        fetch("http://127.0.0.1:5000/api/upload", {
+        fetch("/api/upload", {
             method: "POST",
             body: formData
         })
@@ -104,7 +104,7 @@ function handleFiles(files) {
         const formData2 = new FormData();
         formData2.append("file", file);
 
-        fetch("http://127.0.0.1:5000/api/analyze", {
+        fetch("/api/analyze", {
             method: "POST",
             body: formData2
         })
@@ -278,7 +278,7 @@ function updateBarChart() {
     formData.append("file", file);
     formData.append("bar_column", col);
 
-    fetch("http://127.0.0.1:5000/api/analyze", {
+    fetch("/api/analyze", {
         method: "POST",
         body: formData
     })
@@ -296,7 +296,7 @@ function updateDoughnutChart() {
     formData.append("file", file);
     formData.append("doughnut_column", col);
 
-    fetch("http://127.0.0.1:5000/api/analyze", {
+    fetch("/api/analyze", {
         method: "POST",
         body: formData
     })
@@ -453,7 +453,7 @@ function executeMerge() {
     document.getElementById("mergePreview").innerHTML = '<div class="merge-awaiting">// executing merge...</div>';
     document.getElementById("mergePreviewBadge").textContent = "PROCESSING";
 
-    fetch("http://127.0.0.1:5000/api/merge", {
+    fetch("/api/merge", {
         method: "POST",
         body: formData
     })
@@ -561,7 +561,7 @@ function sendToReports() {
     filesToMerge.forEach(f => formData.append("files[]", f));
     selected.forEach(col => formData.append("columns[]", col));
 
-    fetch("http://127.0.0.1:5000/api/report", {
+    fetch("/api/report", {
         method: "POST",
         body: formData
     })
@@ -738,7 +738,7 @@ function exportData() {
     columns.forEach(col => formData.append("columns[]", col));
     formData.append("format", currentExportFormat);
 
-    fetch("http://127.0.0.1:5000/api/export", {
+    fetch("/api/export", {
         method: "POST",
         body: formData
     })
