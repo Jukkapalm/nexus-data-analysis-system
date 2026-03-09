@@ -63,28 +63,28 @@
 
                 <!-- Status kortit -->
                 <div class="row g-3">
-                    <div class="col-3">
+                    <div class="col-6">
                         <div class="stat-card">
                             <div class="stat-label">DATASETS LOADED</div>
                             <div class="stat-value inactive" id="stat-datasets">- NONE -</div>
                         </div>
                     </div>
 
-                    <div class="col-3">
+                    <div class="col-6">
                         <div class="stat-card">
                             <div class="stat-label">TOTAL RECORDS</div>
                             <div class="stat-value inactive" id="stat-records">- NONE -</div>
                         </div>
                     </div>
 
-                    <div class="col-3">
+                    <div class="col-6">
                         <div class="stat-card">
                             <div class="stat-label">LAST IMPORT</div>
                             <div class="stat-value inactive" id="stat-lastimport">- NONE -</div>
                         </div>
                     </div>
 
-                    <div class="col-3">
+                    <div class="col-6">
                         <div class="stat-card">
                             <div class="stat-label">SYSTEM STATUS</div>
                             <div class="stat-value inactive" id="stat-status">IDLE</div>
@@ -112,10 +112,10 @@
                 <div class="row g-4">
 
                     <!-- Vasen: Dropzone + Analyzing -->
-                    <div class="col-7">
+                    <div class="col-6">
                         <div class="dropzone" id="dropzone">
                             <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" multiple>
-                            <i class="bi bi-cloud-upload dropdzone-icon"></i>
+                            <i class="bi bi-cloud-upload dropzone-icon"></i>
                             <div class="dropzone-title">DROP FILES HERE</div>
                             <div class="dropzone-sub">or click to browse your system</div>
                             <div class="dropzone-formats">
@@ -141,7 +141,7 @@
                     </div>
 
                     <!-- Oikea: Ladatut tiedostot -->
-                    <div class="col-5">
+                    <div class="col-6">
                         <div class="files-section">
                             <div class="section-label">// LOADED DATASETS</div>
                             <div id="filesEmpty" class="files-empty">NO FILES LOADED</div>
@@ -224,7 +224,7 @@
             <div id="view-merge" class="view">
                 <div class="page-header">
                     <div class="page-title"><span>//</span> DATA MERGE</div>
-                    <div class="page-path">nexu / merge / combine</div>
+                    <div class="page-path">nexus / merge / combine</div>
                 </div>
 
                 <!-- Tyhjä tila kun ei tiedostoja ladattu -->
@@ -250,19 +250,9 @@
                             <!-- Merge tyyppi -->
                             <div class="chart-card mt-3">
                                 <div class="chart-card-header">
-                                    <span class="chart-card-title">// MERGE TYPE</span>
+                                    <span class="chart-card-title">// HOW TO MERGE</span>
                                 </div>
-                                <div class="d-flex gap-2 mt-2">
-                                    <button class="merge-type-btn active" id="btnStack" onclick="setMergeType('stack')">// STACK</button>
-                                    <button class="merge-type-btn" id="btnJoin" onclick="setMergeType('join')">// JOIN</button>
-                                </div>
-                                <div class="merge-type-desc mt-2" id="mergeTypeDesc">Pinoa tiedostot päällekkäin - samat sarakkeet yhdistyvät</div>
-
-                                <!-- Join sarake valitsin - näkyy vain join-modessa -->
-                                <div id="joinColumnWrapper" style="display: none;" class="mt-2">
-                                    <div class="section-label">// JOIN COLUMN</div>
-                                    <select id="joinColumnSelect" class="nexus-select"></select>
-                                </div>
+                                <div class="merge-type-desc mt-2" id="mergeTypeDesc">Valitse tiedostot listasta ja paina EXECUTE MERGE - sarakkeet yhdistyvät automaattisesti</div>
                             </div>
 
                             <button class="execute-btn mt-3" onclick="executeMerge()">// EXECUTE MERGE</button>
