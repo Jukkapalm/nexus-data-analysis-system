@@ -88,7 +88,7 @@ function handleFiles(files) {
         .then(res => res.json())
         .then(data => {
             console.log("Backend vastasi:", data);
-            addFileToList(data.filename, data.rows + "rows");
+            addFileToList(data.filename, data.rows + " rows");
             updateDashboard(data);
             window.lastUploadedFile = file;
 
@@ -111,7 +111,7 @@ function handleFiles(files) {
         .then(res => res.json())
         .then(data => {
             console.log("Analyze vastasi:", data);
-            // Tallennetaan analyysitylos muistiin
+            // Tallennetaan analyysitulos muistiin
             window.analysisData = data;
         })
         .catch(err => console.error("Analyze virhe:", err));
@@ -209,13 +209,6 @@ function loadSampleData() {
     }, 3500);
 }
 
-// Apufunktio: tiedostokoko luettavaan muotoon
-function formatSize(bytes) {
-    if (bytes < 1024) return bytes + " B";
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
-    return (bytes / (1024 * 1024)).toFixed(1) + " MB";
-}
-
 // Päivittää dashboard stat-kortit ladatun datan perusteella
 function updateDashboard(data) {
 
@@ -223,7 +216,7 @@ function updateDashboard(data) {
     const loadedCount = document.getElementById("filesList").children.length;
     document.getElementById("stat-datasets").textContent = loadedCount;
 
-    // Rvimäärä
+    // Rivimäärä
     document.getElementById("stat-records").textContent = data.rows;
 
     // Viimeisin tiedosto
@@ -243,7 +236,7 @@ function updateDashboard(data) {
 Chart.defaults.color = "#555577";
 Chart.defaults.borderColor = "rgba(0,255,255,0.08)";
 Chart.defaults.font.family = "JetBrains Mono";
-Chart.defaults.font.size = 10;
+Chart.defaults.font.size = 13;
 
 // Värit kaavioisiin
 const CHART_COLORS = ["#00ffff", "#9d00ff", "#ff0066", "#00ff88", "#ffcc00", "#ff6600", "#00aaff", "#ff00aa"];
@@ -367,7 +360,7 @@ function drawDoughnutChart(doughnut_data) {
             plugins: {
                 legend: {
                     position: "bottom",
-                    labels: { color: "#555577", boxWidth: 10, padding: 8, font: { size: 9 } }
+                    labels: { color: "#555577", boxWidth: 12, padding: 10, font: { size: 12 } }
                 }
             }
         }
@@ -384,9 +377,6 @@ window.showView = function(name) {
 }
 
 // Data Merge toiminnallisuus
-// Merge tyyppi - stack tai join
-let currentMergeType = "stack";
-
 // Päivittää merge tiedostolistan ladatuista tiedostoista
 function updateMergeFileList() {
     const mergeFileList = document.getElementById("mergeFileList");
@@ -434,33 +424,6 @@ function toggleMergeFile(checkbox) {
     }
 }
 
-// Vaihda merge tyyppi
-function setMergeType(type) {
-    currentMergeType = type;
-
-    document.getElementById("btnStack").classList.toggle("active", type === "stack");
-    document.getElementById("btnJoin").classList.toggle("active", type === "join");
-
-    document.getElementById("mergeTypeDesc").textContent = type === "stack"
-        ? "Pinoa tiedostot päällekkäin - samat sarakkeet yhdistyvät"
-        : "Yhdistä tiedostot yhteisen sarakkeen perusteella";
-
-    document.getElementById("joinColumnWrapper").style.display = type === "join" ? "block" : "none";
-
-    // Täytetään join sarake valitsin analyysi datasta
-    if (type === "join" && window.analysisData) {
-        const joinSelect = document.getElementById("joinColumnSelect");
-        joinSelect.innerHTML = "";
-        const allCols = [
-            ...window.analysisData.text_columns,
-            ...window.analysisData.numeric_columns
-        ];
-        allCols.forEach(col => {
-            joinSelect.innerHTML += `<option value="${col}">${col.toUpperCase()}</option>`;
-        });
-    }
-}
-
 // Suorita merge
 function executeMerge() {
     const selected = Array.from(
@@ -484,12 +447,7 @@ function executeMerge() {
 
     const formData = new FormData();
     filesToMerge.forEach(f => formData.append("files[]", f));
-    formData.append("merge_type", currentMergeType);
-
-    if (currentMergeType === "join") {
-        const joinCol = document.getElementById("joinColumnSelect").value;
-        formData.append("join_column", joinCol);
-    }
+    selected.forEach(col => formData.append("columns[]", col));
 
     // Näytetään loading tila
     document.getElementById("mergePreview").innerHTML = '<div class="merge-awaiting">// executing merge...</div>';
@@ -564,9 +522,6 @@ function renderMergePreview(data) {
     table.appendChild(tbody);
     wrapper.appendChild(table);
     container.appendChild(wrapper);
-
-    /*document.getElementById("mergePreview").innerHTML = "";
-    document.getElementById("mergePreview").appendChild(wrapper);*/
 }
 
 // Päivitetään showView jotta merge lista päivittyy
@@ -645,11 +600,11 @@ function typewriterEffect(lines, index = 0) {
     const div = document.createElement("div");
     div.className = line.cls;
     terminal.appendChild(div);
-    terminal.scrollTop = terminal.scrollHeight;
 
     let charIndex = 0;
     const interval = setInterval(() => {
         div.textContent += line.text[charIndex];
+        terminal.scrollTop = terminal.scrollHeight;
         charIndex++;
         if (charIndex >= line.text.length) {
             clearInterval(interval);
@@ -661,13 +616,77 @@ function typewriterEffect(lines, index = 0) {
 // Rakentaa terminaali rivit report datasta
 function buildReportLines(data) {
     const lines = [];
+    const SEP = "> ─────────────────────────────────";
 
     lines.push({ text: "> NEXUS REPORT SYSTEM INITIALIZED...", cls: "t-line", pause: 200 });
     lines.push({ text: "> PROCESSING MERGED DATASET...", cls: "t-line", pause: 200 });
-    lines.push({ text: "> ─────────────────────────────────", cls: "t-line", pause: 100 });
+    lines.push({ text: SEP, cls: "t-line", pause: 100 });
     lines.push({ text: `> TOTAL FILES MERGED: ${data.total_files}`, cls: "t-cyan", pause: 150 });
     lines.push({ text: `> TOTAL ROWS: ${data.total_rows.toLocaleString()}`, cls: "t-cyan", pause: 200 });
-    lines.push({ text: "> ─────────────────────────────────", cls: "t-line", pause: 100 });
+
+    // Trendi-osio - näytetään vain jos vertailuvuosia löytyy
+    if (data.has_years && data.trends && data.trends.length > 0) {
+        lines.push({ text: SEP, cls: "t-line", pause: 100 });
+        lines.push({ text: `> TREND ANALYSIS: ${data.years[0]} → ${data.years[data.years.length - 1]}`, cls: "t-cyan", pause: 200 });
+
+        data.trends.forEach(trend => {
+            const arrow = trend.direction === "up" ? "▲" : trend.direction === "down" ? "▼" : "→";
+            const sign = trend.change > 0 ? "+" : "";
+            const cls = trend.direction === "up" ? "t-success" : trend.direction === "down" ? "t-danger" : "t-value";
+
+            lines.push({ text: `>   ${trend.column.toUpperCase()}`, cls: "t-value", pause: 100 });
+            lines.push({ text: `>   ${data.years[0]}: ${trend.value1.toLocaleString()} CR`, cls: "t-value", pause: 80 });
+            lines.push({ text: `>   ${data.years[data.years.length - 1]}: ${trend.value2.toLocaleString()} CR`, cls: "t-value", pause: 80 });
+            lines.push({ text: `>   ${arrow} MUUTOS: ${sign}${trend.change}%`, cls, pause: 150 });
+        });
+    }
+
+    // Ryhmittely-osio - yksi lohko per ryhmittely (area, product jne.)
+    if (data.groupings && data.groupings.length > 0) {
+        data.groupings.forEach(grp => {
+            lines.push({ text: SEP, cls: "t-line", pause: 100 });
+            lines.push({ text: `> GROUP BY: ${grp.group_column.toUpperCase()}`, cls: "t-cyan", pause: 200 });
+
+            // Paras ryhmä narratiivina
+            if (grp.rows && grp.rows.length > 0) {
+                const best = grp.rows[0];
+                lines.push({
+                    text: `>   ★ ${best.group.toUpperCase()} ON TUOTTAVIN (${best.share_pct}% TULOISTA)`,
+                    cls: "t-success",
+                    pause: 200
+                });
+            }
+
+            // Kaikki ryhmät
+            grp.rows.forEach(row => {
+                lines.push({ text: `>   ${row.group.toUpperCase()}  —  OSUUS: ${row.share_pct}%`, cls: "t-value", pause: 80 });
+
+                // Vuosivertailu per numeerinen sarake
+                grp.numeric_columns.forEach(col => {
+                    if (data.has_years && grp.years && grp.years.length >= 2) {
+                        const y1 = grp.years[0];
+                        const y2 = grp.years[grp.years.length - 1];
+                        const v1 = row[`${col}_${y1}`];
+                        const v2 = row[`${col}_${y2}`];
+                        const pct = row[`${col}_change_pct`];
+
+                        if (v1 !== undefined && v2 !== undefined) {
+                            const arrow = pct > 0 ? "▲" : pct < 0 ? "▼" : "→";
+                            const sign  = pct > 0 ? "+" : "";
+                            const cls   = pct > 0 ? "t-success" : pct < 0 ? "t-danger" : "t-value";
+                            lines.push({ text: `>     ${col}: ${v1.toLocaleString()} → ${v2.toLocaleString()} ${arrow} ${sign}${pct}%`, cls, pause: 60 });
+                        }
+                    } else if (row[col] !== undefined) {
+                        lines.push({ text: `>     ${col}: ${row[col].toLocaleString()}`, cls: "t-value", pause: 60 });
+                    }
+                });
+            });
+        });
+    }
+
+    // Perustilastot
+    lines.push({ text: SEP, cls: "t-line", pause: 100 });
+    lines.push({ text: "> BASE STATISTICS", cls: "t-cyan", pause: 150 });
 
     data.stats.forEach(stat => {
         lines.push({ text: `> COLUMN: ${stat.column.toUpperCase()}`, cls: "t-cyan", pause: 150 });
