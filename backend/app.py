@@ -27,7 +27,7 @@ def static_files(filename):
 
 @app.route("/api/sample/<filename>")
 def serve_sample(filename):
-    return send_from_directory("../sample-data", filename)
+    return send_from_directory("../sample data", filename)
 
 # Tiedoston lähetys ja analysointi
 @app.route("/api/upload", methods=["POST"])
